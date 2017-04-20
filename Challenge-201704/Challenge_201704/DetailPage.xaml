@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Challenge_201704"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+             x:Class="Challenge_201704.DetailPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:GenderToImageConverter x:Key="GenderToImageConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <!-- -->
+        <Image Source="http://cfile6.uf.tistory.com/image/2738763A510736C51004AC"
+               VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+               Aspect="AspectFill"
+               Grid.Row="0"/>
+        <controls:CircleImage Source="{Binding Photo}" Grid.Column="0"
+                              WidthRequest="120" HeightRequest="120"
+                              HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand"/>
+        <StackLayout Grid.Row="1">
+            <Label Text="{Binding Name}" HorizontalOptions="Center" TextColor="Black" FontSize="Medium"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Label Text="{Binding Gender}" TextColor="Gray" FontSize="Small"/>
+                <Image Source="{Binding Gender, Converter={StaticResource GenderToImageConverter}}"
+                       VerticalOptions="Center"
+                       WidthRequest="12" HeightRequest="12"/>
+            </StackLayout>
+            <Label Text="{Binding Email}" HorizontalOptions="Center" TextColor="Gray" FontSize="Small"/>
+            <Label Text="{Binding Phone}" HorizontalOptions="Center" TextColor="Gray" FontSize="Small"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Label Text="{Binding State}" TextColor="Gray" FontSize="Small"/>
+                <Label Text=" State" TextColor="Gray" FontSize="Small"/>
+            </StackLayout>
+            
+        </StackLayout>
+    </Grid>
+</ContentPage>

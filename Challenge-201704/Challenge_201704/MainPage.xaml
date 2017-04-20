@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Challenge_201704"
+             xmlns:b="clr-namespace:Xamarin.Behaviors;assembly=Xamarin.Behaviors"
+             xmlns:e="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             xmlns:d="clr-namespace:Pillar;assembly=Pillar"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+             Title="Challenge Xamarin"
+             x:Class="Challenge_201704.MainPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:GenderToImageConverter x:Key="GenderToImageConverter"/>
+            <local:ItemTappedEventArgsConverter x:Key="ItemTappedEventArgsConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <!--
+    IOS의 경우에 최 상단에 시간이 위치하므로 아래 패딩을 넣어주어
+    컨텐츠를 시계 아래에 위치하도록 만든다
+    -->
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <OnPlatform.iOS>0, 20, 0, 0</OnPlatform.iOS>
+        </OnPlatform>
+    </ContentPage.Padding>
+    <ListView ItemsSource="{Binding Users}" ItemAppearing="OnItemAppearing">
+        <!--
+        아래 방식으로 구현하면 CommandParameter 대신에,
+        EventArgs를 매개변수로 넘겨주고,
+        이를 컨버터가 데이터를 추출해주면 바인딩된 데이터를 가져올 수 있다
+        ..올
+        -->
+        <ListView.Behaviors>
+            <d:EventToCommandBehavior EventName="ItemTapped" Command="{Binding DoTappedUser}"/>
+        </ListView.Behaviors>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="8*"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- 좌측 사용자 프로필 사진 -->
+                        <controls:CircleImage Source="{Binding Photo}" 
+                                              Grid.Column="0">
+                            <controls:CircleImage.WidthRequest>
+                                <OnPlatform x:TypeArguments="x:Double"
+                                    iOS="55"
+                                    Android="55"
+                                    WinPhone="75"/>
+                            </controls:CircleImage.WidthRequest>
+                            <controls:CircleImage.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double"
+                                    iOS="55"
+                                    Android="55"
+                                    WinPhone="75"/>
+                            </controls:CircleImage.HeightRequest>
+                        </controls:CircleImage>
+                        <!-- 우측 사용자 정보 -->
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackLayout Orientation="Horizontal" Grid.Row="0"
+                                         VerticalOptions="Center">
+                                <Image Source="{Binding Gender, Converter={StaticResource GenderToImageConverter}}"
+                                       WidthRequest="10" HeightRequest="10"/>
+                                <Label Text="{Binding Name}" FontSize="Small"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal" Grid.Row="1"
+                                         VerticalOptions="Start">
+                                <Label Text="{Binding Phone}" FontSize="Small"/>
+                                <Label Text="{Binding State}" FontSize="Small"/>
+                            </StackLayout>
+                        </Grid>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>
